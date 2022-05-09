@@ -20,7 +20,7 @@ function showList(){
         }
     })
 }
-
+showList()
 function showCreateForm(){
     let content = `<div class="container">
                     <form>
@@ -77,8 +77,9 @@ function showEditForm(id){
                             <input type="file" class="form-control" id="u-image">
                         </div>
                         <div class="modal-footer">
-                             <button type="submit" class="btn btn-primary" onclick="editProduct(${id})">Edit</button>
-                             <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="editProduct(${id})" data-bs-dismiss="modal">Edit</button>
+                  
                         </div>
                     </form>
                 </div>`
@@ -138,13 +139,13 @@ function editProduct(id){
     let description = $(`#u-description`).val()
     let image = $(`#u-image`)
     let productForm = new FormData();
-    productForm.append('id',id);
     productForm.append('name',name);
     productForm.append('price',price);
     productForm.append('quantity',quantity);
     productForm.append('description',description);
-
+    productForm.append('image',image.prop('files')[0]);
     if (image.prop('files')[0]=== undefined){
+        let file = new File([""],"filename.jpg")
         productForm.append('image',file);
     } else {
         productForm.append('image',image.prop('files')[0]);
@@ -158,6 +159,7 @@ function editProduct(id){
         url:`http://localhost:8080/products/edit/${id}`,
         success:showList
     })
+    event.preventDefault();
 }
-showList()
+
 
